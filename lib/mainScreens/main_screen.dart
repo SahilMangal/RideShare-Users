@@ -22,8 +22,6 @@ class _MainScreenState extends State<MainScreen> {
   final Completer<GoogleMapController> _controllerGoogleMap = Completer<GoogleMapController>();
   GoogleMapController? newGoogleMapController;
 
-
-
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
@@ -366,7 +364,11 @@ class _MainScreenState extends State<MainScreen> {
                       GestureDetector(
                         onTap: (){
                           // go to search places screen
-                          Navigator.push(context, MaterialPageRoute(builder: (c)=> SearchPlacesScreen()));
+                          var responseFromSearchScreen = Navigator.push(context, MaterialPageRoute(builder: (c)=> SearchPlacesScreen()));
+
+                          if(responseFromSearchScreen == "obtainedDropoff") {
+                            // Draw Routes - Polyline
+                          }
 
                         },
                         child: Row(
@@ -381,8 +383,10 @@ class _MainScreenState extends State<MainScreen> {
                                   style: TextStyle(color: Color(0xFFff725e), fontSize: 12,),
                                 ),
                                 Text(
-                                  "User Drop off location",
-                                  style: const TextStyle(color: Color(0xFFff725e), fontSize: 15,),
+                                  Provider.of<AppInfo>(context).userDropOffLocation != null
+                                      ? Provider.of<AppInfo>(context).userDropOffLocation!.locationName!
+                                      : "User Drop off location",
+                                  style: const TextStyle(color: Colors.white, fontSize: 15,),
                                 ),
                               ],
                             ),

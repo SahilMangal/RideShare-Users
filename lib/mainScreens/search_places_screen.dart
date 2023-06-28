@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:rideshare_users/assistants/request_assistant.dart';
 import 'package:rideshare_users/global/map_key.dart';
 import 'package:rideshare_users/mainScreens/main_screen.dart';
+import 'package:rideshare_users/models/predicted_places.dart';
+import 'package:rideshare_users/widgets/place_prediction_tile.dart';
 
 class SearchPlacesScreen extends StatefulWidget {
 
@@ -10,6 +12,8 @@ class SearchPlacesScreen extends StatefulWidget {
 }
 
 class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
+
+  List<PredictedPlaces> placesPredictedList = [];
 
   Future<void> findPlaceAutoCompleteSearch(String inputText) async {
 
@@ -21,8 +25,15 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
         return;
       }
       
-      print("this is response/result: ");
-      print(responseAutoCompleteSearch);
+      if(responseAutoCompleteSearch["status"] == "OK"){
+        var placesPredictions = responseAutoCompleteSearch["predictions"];
+
+        var placesPredictionsList = (placesPredictions as List).map((jsonData) => PredictedPlaces.fromJson(jsonData)).toList();
+
+        setState(() {
+          placesPredictedList = placesPredictionsList;
+        });
+      }
 
     }
 
@@ -34,6 +45,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
       backgroundColor: Color(0xFF2D2727),
       body: Column(
         children: [
+          //search place UI
           Container(
             height: 160,
             decoration: const BoxDecoration(
@@ -75,7 +87,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                           "Search & Set DropOff Location",
                           style: TextStyle(
                             color: Color(0xFFff725e),
-                            fontSize: 18,
+                            fontSize: 19,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -125,6 +137,28 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
               ),
             ),
           ),
+
+          //display placeAPI predictions results
+          (placesPredictedList.length > 0)
+              ? Expanded(
+                  child: ListView.separated(
+                    itemCount: placesPredictedList.length,
+                    physics: ClampingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return PlacePredictionTileDesign(
+                        predictedPlaces: placesPredictedList[index],
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const Divider(
+                        height: 1,
+                        color: Color(0xFFff725e),
+                        thickness: 2,
+                      );
+                    },
+                  ),
+                )
+              : Container(),
         ],
       ),
     );
