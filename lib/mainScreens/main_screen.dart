@@ -46,6 +46,9 @@ class _MainScreenState extends State<MainScreen> {
   Set<Marker> markersSet = {};
   Set<Circle> circlesSet = {};
 
+  String userName = "Your Name";
+  String userEmail = "Your Email";
+
   //Black Theme Google Maps
   blackThemeGoogleMap(){
     newGoogleMapController!.setMapStyle('''
@@ -235,6 +238,9 @@ class _MainScreenState extends State<MainScreen> {
 
     String humanReadableAddress = await AssistantMethods.searchAddressForGeographicCoordinated(userCurrentPosition!, context);
     print("this is your address = " + humanReadableAddress);
+
+    userName = userModelCurrentInfo!.name!;
+    userEmail = userModelCurrentInfo!.email!;
   }
 
   @override
@@ -254,8 +260,8 @@ class _MainScreenState extends State<MainScreen> {
             canvasColor: Color(0xFF2D2727),
           ),
           child: MyDrawer(
-            name: userModelCurrentInfo?.name,
-            email: userModelCurrentInfo?.email,
+            name: userName,
+            email: userEmail,
           ),
         ),
       ),
@@ -379,7 +385,7 @@ class _MainScreenState extends State<MainScreen> {
 
                           if(responseFromSearchScreen == "obtainedDropoff") {
                             // Draw Routes - Polyline
-                            drawPolylineFromOriginToDestination();
+                            await drawPolylineFromOriginToDestination();
                           }
 
                         },
