@@ -25,7 +25,6 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
         return;
       }
 
-
       if(responseAutoCompleteSearch["status"] == "OK"){
         var placesPredictions = responseAutoCompleteSearch["predictions"];
 

@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rideshare_users/assistants/request_assistant.dart';
 import 'package:rideshare_users/global/global.dart';
 import 'package:rideshare_users/global/map_key.dart';
 import 'package:rideshare_users/infoHandler/app_info.dart';
+import 'package:rideshare_users/models/direction_details_info.dart';
 import 'package:rideshare_users/models/directions.dart';
 import 'package:rideshare_users/models/user_model.dart';
 
@@ -33,7 +35,6 @@ class AssistantMethods{
   }
 
   static void readCurrentOnlineUserInfo() async{
-
     currentFirebaseUser = fAuth.currentUser;
     DatabaseReference userRef = FirebaseDatabase.instance
         .ref()
@@ -45,7 +46,27 @@ class AssistantMethods{
         userModelCurrentInfo = UserModel.fromSnapshot(snap.snapshot);
       }
     });
+  }
 
+  static Future<DirectionDetailsInfo?> obtainOriginToDestinationDetails(LatLng originPosition, LatLng destinationPosition) async {
+    String urlObtainOriginToDestinationDetails = "https://maps.googleapis.com/maps/api/directions/json?origin=${originPosition.latitude},${originPosition.longitude}&destination=${destinationPosition.latitude},${destinationPosition.longitude}&key=$mapKey";
+
+    var responseDirectionsApi =  await RequestAssistant.receiveRequest(urlObtainOriginToDestinationDetails);
+
+    if (responseDirectionsApi == "Error Occurred, No Response.") {
+      return null;
+    }
+
+    DirectionDetailsInfo directionDetailsInfo = DirectionDetailsInfo();
+    directionDetailsInfo.e_points = responseDirectionsApi["routes"][0]["overview_polyline"]["points"];
+
+    directionDetailsInfo.distance_text = responseDirectionsApi["routes"][0]["legs"][0]["distance"]["text"];
+    directionDetailsInfo.distance_value = responseDirectionsApi["routes"][0]["legs"][0]["distance"]["value"];
+
+    directionDetailsInfo.durarion_text = responseDirectionsApi["routes"][0]["legs"][0]["duration"]["text"];
+    directionDetailsInfo.duration_value = responseDirectionsApi["routes"][0]["legs"][0]["duration"]["value"];
+
+    return directionDetailsInfo;
   }
 
 }

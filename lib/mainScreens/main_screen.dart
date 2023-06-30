@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,7 @@ import 'package:rideshare_users/global/global.dart';
 import 'package:rideshare_users/infoHandler/app_info.dart';
 import 'package:rideshare_users/mainScreens/search_places_screen.dart';
 import 'package:rideshare_users/widgets/my_drawer.dart';
+import 'package:rideshare_users/widgets/progress_dialog.dart';
 
 class MainScreen extends StatefulWidget {
 
@@ -37,6 +39,12 @@ class _MainScreenState extends State<MainScreen> {
   LocationPermission? _locationPermission;
 
   double bottomPaddingOfMap = 0;
+
+  List<LatLng> pLineCoordinateList = [];
+  Set<Polyline> polylineSet = {};
+
+  Set<Marker> markersSet = {};
+  Set<Circle> circlesSet = {};
 
   //Black Theme Google Maps
   blackThemeGoogleMap(){
@@ -262,6 +270,9 @@ class _MainScreenState extends State<MainScreen> {
             zoomGesturesEnabled: true,
             zoomControlsEnabled: true,
             initialCameraPosition: _kGooglePlex,
+            polylines: polylineSet,
+            markers: markersSet,
+            circles: circlesSet,
             onMapCreated: (GoogleMapController controller){
               _controllerGoogleMap.complete(controller);
               newGoogleMapController = controller;
@@ -362,12 +373,13 @@ class _MainScreenState extends State<MainScreen> {
 
                       //To Location
                       GestureDetector(
-                        onTap: (){
+                        onTap: () async {
                           // go to search places screen
-                          var responseFromSearchScreen = Navigator.push(context, MaterialPageRoute(builder: (c)=> SearchPlacesScreen()));
+                          var responseFromSearchScreen = await Navigator.push(context, MaterialPageRoute(builder: (c)=> SearchPlacesScreen()));
 
                           if(responseFromSearchScreen == "obtainedDropoff") {
                             // Draw Routes - Polyline
+                            drawPolylineFromOriginToDestination();
                           }
 
                         },
@@ -437,4 +449,112 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
+
+  Future<void> drawPolylineFromOriginToDestination() async {
+    var sourcePosition = Provider.of<AppInfo>(context, listen: false).userPickupLocation;
+    var destinationPosition = Provider.of<AppInfo>(context, listen: false).userDropOffLocation;
+
+    var sourceLatLng = LatLng(sourcePosition!.locationLatitude!, sourcePosition!.locationLongitude!);
+    var destinationLatLng = LatLng(destinationPosition!.locationLatitude!, destinationPosition!.locationLongitude!);
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context)=> ProgressDialog(message: "Please wait...",),
+    );
+    
+    var directionDetailsInfo = await AssistantMethods.obtainOriginToDestinationDetails(sourceLatLng, destinationLatLng);
+
+    Navigator.pop(context);
+
+    PolylinePoints pPoints = PolylinePoints();
+    List<PointLatLng> decodedPolyPointList = pPoints.decodePolyline(directionDetailsInfo!.e_points!);
+
+    pLineCoordinateList.clear();
+
+    if(decodedPolyPointList.isNotEmpty) {
+      decodedPolyPointList.forEach((PointLatLng pointLatLng) {
+        pLineCoordinateList.add(LatLng(pointLatLng.latitude, pointLatLng.longitude));
+      });
+    }
+
+    polylineSet.clear();
+
+    setState(() {
+      Polyline polyline = Polyline(
+        color: const Color(0xFFff725e),
+        polylineId: const PolylineId("PolylineID"),
+        jointType: JointType.round,
+        points: pLineCoordinateList,
+        startCap: Cap.roundCap,
+        endCap: Cap.roundCap,
+        geodesic: true,
+      );
+
+      polylineSet.add(polyline);
+    });
+
+    LatLngBounds boundsLatLng;
+    if(sourceLatLng.latitude > destinationLatLng.latitude
+        && sourceLatLng.longitude > destinationLatLng.longitude) {
+      boundsLatLng = LatLngBounds(southwest: destinationLatLng, northeast: sourceLatLng);
+    } else if(sourceLatLng.longitude > destinationLatLng.longitude) {
+      boundsLatLng = LatLngBounds(
+          southwest: LatLng(sourceLatLng.latitude, destinationLatLng.longitude),
+          northeast: LatLng(destinationLatLng.latitude, sourceLatLng.longitude),
+      );
+    } else if(sourceLatLng.latitude > destinationLatLng.latitude) {
+      boundsLatLng = LatLngBounds(
+        southwest: LatLng(destinationLatLng.latitude, sourceLatLng.longitude),
+        northeast: LatLng(sourceLatLng.latitude, destinationLatLng.longitude),
+      );
+    } else {
+      boundsLatLng = LatLngBounds(southwest: sourceLatLng, northeast: destinationLatLng);
+    }
+    
+    newGoogleMapController!.animateCamera(CameraUpdate.newLatLngBounds(boundsLatLng, 65));
+    
+    Marker originMarker = Marker(
+      markerId: MarkerId("originID"),
+      infoWindow: InfoWindow(title: sourcePosition.locationName, snippet: "Origin"),
+      position: sourceLatLng,
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+    );
+
+    Marker destinationMarker = Marker(
+      markerId: MarkerId("destinationID"),
+      infoWindow: InfoWindow(title: destinationPosition.locationName, snippet: "Destination"),
+      position: destinationLatLng,
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+    );
+
+    setState(() {
+      markersSet.add(originMarker);
+      markersSet.add(destinationMarker);
+    });
+
+    Circle originCircle = Circle(
+      circleId: CircleId("originID"),
+      fillColor: const Color(0xFFff725e),
+      radius: 12,
+      strokeWidth: 3,
+      strokeColor: Colors.white,
+      center: sourceLatLng,
+    );
+
+    Circle destinationCircle = Circle(
+      circleId: CircleId("destinationID"),
+      fillColor: const Color(0xFFff725e),
+      radius: 12,
+      strokeWidth: 3,
+      strokeColor: Colors.white,
+      center: destinationLatLng,
+    );
+
+    setState(() {
+      circlesSet.add(originCircle);
+      circlesSet.add(destinationCircle);
+    });
+    
+  }
+
 }
