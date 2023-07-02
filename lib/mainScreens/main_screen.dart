@@ -1,15 +1,18 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rideshare_users/assistants/assistant_methods.dart';
+import 'package:rideshare_users/assistants/geofire_assistant.dart';
 import 'package:rideshare_users/authentication/login_screen.dart';
 import 'package:rideshare_users/global/global.dart';
 import 'package:rideshare_users/infoHandler/app_info.dart';
 import 'package:rideshare_users/mainScreens/search_places_screen.dart';
+import 'package:rideshare_users/models/active_nearby_available_drivers.dart';
 import 'package:rideshare_users/widgets/my_drawer.dart';
 import 'package:rideshare_users/widgets/progress_dialog.dart';
 
@@ -237,7 +240,6 @@ class _MainScreenState extends State<MainScreen> {
     newGoogleMapController!.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 
     String humanReadableAddress = await AssistantMethods.searchAddressForGeographicCoordinated(userCurrentPosition!, context);
-    print("this is your address = " + humanReadableAddress);
 
     userName = userModelCurrentInfo!.name!;
     userEmail = userModelCurrentInfo!.email!;
@@ -561,6 +563,55 @@ class _MainScreenState extends State<MainScreen> {
       circlesSet.add(destinationCircle);
     });
     
+  }
+
+  initializeGeoFireListner() {
+
+    Geofire.initialize("activeDrivers");
+
+    Geofire.queryAtLocation(userCurrentPosition!.latitude, userCurrentPosition!.longitude, 10)!
+        .listen((map) {
+          print(map);
+          if (map != null) {
+            var callBack = map['callBack'];
+
+            //latitude will be retrieved from map['latitude']
+            // longitude will be retrieved from map['longitude']
+
+            switch (callBack) {
+
+              // Whenever any driver becomes active or online
+              case Geofire.onKeyEntered:
+                ActiveNearbyAvailableDrivers activeNearbyAvailableDriver = ActiveNearbyAvailableDrivers();
+                activeNearbyAvailableDriver.locationLatitude = map['latitude'];
+                activeNearbyAvailableDriver.locationLongitude = map['longitude'];
+                activeNearbyAvailableDriver.driverId = map['key'];
+
+                GeofireAssistant.activeNearbyAvailableDriversList.add(activeNearbyAvailableDriver);
+                break;
+
+              // Whenever any driver becomes inactive or offline
+              case Geofire.onKeyExited:
+                GeofireAssistant.deleteOfflineDriverFromList(map['key']);
+                break;
+
+              // Whenever Driver moves - update driver location
+              case Geofire.onKeyMoved:
+                ActiveNearbyAvailableDrivers activeNearbyAvailableDriver = ActiveNearbyAvailableDrivers();
+                activeNearbyAvailableDriver.locationLatitude = map['latitude'];
+                activeNearbyAvailableDriver.locationLongitude = map['longitude'];
+                activeNearbyAvailableDriver.driverId = map['key'];
+                GeofireAssistant.updateActiveNearbyAvailableDriverLocation(activeNearbyAvailableDriver);
+                break;
+
+              case Geofire.onGeoQueryReady:
+                print(map['result']);
+                break;
+            }
+          }
+
+          setState(() {});
+        });
   }
 
 }
