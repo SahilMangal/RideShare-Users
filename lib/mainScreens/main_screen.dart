@@ -52,6 +52,10 @@ class _MainScreenState extends State<MainScreen> {
   String userName = "Your Name";
   String userEmail = "Your Email";
 
+  bool activeNearbyDriverKeyLoaded = false;
+
+  BitmapDescriptor? activeNearbyIcon;
+
   //Black Theme Google Maps
   blackThemeGoogleMap(){
     newGoogleMapController!.setMapStyle('''
@@ -240,9 +244,12 @@ class _MainScreenState extends State<MainScreen> {
     newGoogleMapController!.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 
     String humanReadableAddress = await AssistantMethods.searchAddressForGeographicCoordinated(userCurrentPosition!, context);
-
+    print("*************\nAddress: " + humanReadableAddress);
+    
     userName = userModelCurrentInfo!.name!;
     userEmail = userModelCurrentInfo!.email!;
+
+    initializeGeoFireListner();
   }
 
   @override
@@ -253,6 +260,9 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    createActiveNearbyIconMarker();
+
     return Scaffold(
       key: sKey,
       drawer: Container(
@@ -569,7 +579,7 @@ class _MainScreenState extends State<MainScreen> {
 
     Geofire.initialize("activeDrivers");
 
-    Geofire.queryAtLocation(userCurrentPosition!.latitude, userCurrentPosition!.longitude, 10)!
+    Geofire.queryAtLocation(userCurrentPosition!.latitude, userCurrentPosition!.longitude, 1000)!
         .listen((map) {
           print(map);
           if (map != null) {
@@ -586,13 +596,18 @@ class _MainScreenState extends State<MainScreen> {
                 activeNearbyAvailableDriver.locationLatitude = map['latitude'];
                 activeNearbyAvailableDriver.locationLongitude = map['longitude'];
                 activeNearbyAvailableDriver.driverId = map['key'];
-
                 GeofireAssistant.activeNearbyAvailableDriversList.add(activeNearbyAvailableDriver);
+
+                if(activeNearbyDriverKeyLoaded == true) {
+                  displayActiveDriversOnUserMap();
+                }
+
                 break;
 
               // Whenever any driver becomes inactive or offline
               case Geofire.onKeyExited:
                 GeofireAssistant.deleteOfflineDriverFromList(map['key']);
+                displayActiveDriversOnUserMap();
                 break;
 
               // Whenever Driver moves - update driver location
@@ -602,16 +617,57 @@ class _MainScreenState extends State<MainScreen> {
                 activeNearbyAvailableDriver.locationLongitude = map['longitude'];
                 activeNearbyAvailableDriver.driverId = map['key'];
                 GeofireAssistant.updateActiveNearbyAvailableDriverLocation(activeNearbyAvailableDriver);
+                displayActiveDriversOnUserMap();
                 break;
 
+              // Display Online/active Drivers on Users MAP (UI)
               case Geofire.onGeoQueryReady:
-                print(map['result']);
+                activeNearbyDriverKeyLoaded = true;
+                displayActiveDriversOnUserMap();
                 break;
             }
           }
 
           setState(() {});
         });
+  }
+
+  displayActiveDriversOnUserMap() {
+
+    setState(() {
+      markersSet.clear();
+      circlesSet.clear();
+
+      Set<Marker> driversMarkerSet = Set<Marker>();
+
+      for(ActiveNearbyAvailableDrivers eachDriver in GeofireAssistant.activeNearbyAvailableDriversList) {
+        LatLng eachDriverActivePosition = LatLng(eachDriver.locationLatitude!, eachDriver.locationLongitude!);
+
+        Marker marker = Marker(
+          markerId: MarkerId(eachDriver.driverId!),
+          position: eachDriverActivePosition,
+          icon: activeNearbyIcon!,
+          rotation: 360,
+        );
+
+        driversMarkerSet.add(marker);
+
+      }
+
+      setState(() {
+        markersSet = driversMarkerSet;
+      });
+
+    });
+  }
+
+  createActiveNearbyIconMarker() {
+    if(activeNearbyIcon == null) {
+      ImageConfiguration imageConfiguration = createLocalImageConfiguration(context, size: const Size(2, 2));
+      BitmapDescriptor.fromAssetImage(imageConfiguration, "images/car.png").then((value){
+        activeNearbyIcon = value;
+      });
+    }
   }
 
 }
