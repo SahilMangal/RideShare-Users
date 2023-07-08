@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rideshare_users/assistants/assistant_methods.dart';
 import 'package:rideshare_users/global/global.dart';
 import 'package:rideshare_users/main.dart';
 import 'package:smooth_star_rating_nsafe/smooth_star_rating.dart';
@@ -11,6 +12,21 @@ class SelectNearestActiveDriverScreen extends StatefulWidget {
 }
 
 class _SelectNearestActiveDriverScreenState extends State<SelectNearestActiveDriverScreen> {
+
+  String fareAmount = "";
+  getFareAmountAccordingToVehicleType(int index) {
+    if(tripDirectionDetailsInfo != null) {
+      if(dList[index]["car_details"]["type"].toString() == "bike") {
+        fareAmount = (AssistantMethods.calculateFareAmountFromOriginToDestination(tripDirectionDetailsInfo!) / 2).toStringAsFixed(1);
+      } if(dList[index]["car_details"]["type"].toString() == "Car") {
+        fareAmount = (AssistantMethods.calculateFareAmountFromOriginToDestination(tripDirectionDetailsInfo!)).toString();
+      } if(dList[index]["car_details"]["type"].toString() == "Car-XL") {
+        fareAmount = (AssistantMethods.calculateFareAmountFromOriginToDestination(tripDirectionDetailsInfo!) * 2).toStringAsFixed(1);
+      }
+    }
+    return fareAmount;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,15 +100,28 @@ class _SelectNearestActiveDriverScreenState extends State<SelectNearestActiveDri
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "3",
-                    style: TextStyle(
+                    "\$ " + getFareAmountAccordingToVehicleType(index),
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 2,),
                   Text(
-                    "15 km",
-                    style: TextStyle(
+                    tripDirectionDetailsInfo != null
+                        ? tripDirectionDetailsInfo!.durarion_text!
+                        : "",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(height: 2,),
+                  Text(
+                    tripDirectionDetailsInfo != null
+                        ? tripDirectionDetailsInfo!.distance_text!
+                        : "",
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.black87,
                       fontSize: 12,

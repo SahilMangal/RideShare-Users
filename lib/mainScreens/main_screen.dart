@@ -17,6 +17,7 @@ import 'package:rideshare_users/main.dart';
 import 'package:rideshare_users/mainScreens/search_places_screen.dart';
 import 'package:rideshare_users/mainScreens/select_nearest_active_driver_screen.dart';
 import 'package:rideshare_users/models/active_nearby_available_drivers.dart';
+import 'package:rideshare_users/models/direction_details_info.dart';
 import 'package:rideshare_users/widgets/my_drawer.dart';
 import 'package:rideshare_users/widgets/progress_dialog.dart';
 
@@ -540,6 +541,9 @@ class _MainScreenState extends State<MainScreen> {
     
     var directionDetailsInfo = await AssistantMethods.obtainOriginToDestinationDetails(sourceLatLng, destinationLatLng);
 
+    setState(() {
+      tripDirectionDetailsInfo = directionDetailsInfo;
+    });
     Navigator.pop(context);
 
     PolylinePoints pPoints = PolylinePoints();
