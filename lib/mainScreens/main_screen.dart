@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -61,6 +62,8 @@ class _MainScreenState extends State<MainScreen> {
   BitmapDescriptor? activeNearbyIcon;
 
   List<ActiveNearbyAvailableDrivers> onlineNearbyAvaibaleDriversList = [];
+
+  DatabaseReference? referenceRideRequest;
 
   //Black Theme Google Maps
   blackThemeGoogleMap(){
@@ -266,6 +269,36 @@ class _MainScreenState extends State<MainScreen> {
 
   // Save the ride request information
   saveRideRequestInformation() {
+
+    referenceRideRequest = FirebaseDatabase.instance.ref().child("All Ride Requests").push();
+
+    var originLocation = Provider.of<AppInfo>(context, listen: false).userPickupLocation;
+    var destinationLocation = Provider.of<AppInfo>(context, listen: false).userDropOffLocation;
+
+    Map originLocationMap = {
+      "latitude": originLocation!.locationLatitude.toString(),
+      "longitude": originLocation!.locationLongitude.toString(),
+    };
+
+    Map destinationLocationMap = {
+      "latitude": destinationLocation!.locationLatitude.toString(),
+      "longitude": destinationLocation!.locationLongitude.toString(),
+    };
+
+    Map userInformationMap = {
+      "origin": originLocationMap,
+      "destination": destinationLocationMap,
+      "time": DateTime.now().toString(),
+      "userName": userModelCurrentInfo!.name,
+      "userPhone": userModelCurrentInfo!.phone,
+      "originAddress": originLocation.locationName,
+      "destinationAddress": destinationLocation.locationName,
+      "driverId": "waiting",
+    };
+
+    //save information in database
+    referenceRideRequest!.set(userInformationMap);
+
     onlineNearbyAvaibaleDriversList = GeofireAssistant.activeNearbyAvailableDriversList;
     searchNearestOnlineDrivers();
   }
@@ -275,6 +308,9 @@ class _MainScreenState extends State<MainScreen> {
     // if no driver is online
     if(onlineNearbyAvaibaleDriversList.length == 0) {
       // We have to cancel/delete the ride request
+
+      referenceRideRequest!.remove();
+
       setState(() {
         polylineSet.clear();
         markersSet.clear();
@@ -285,7 +321,8 @@ class _MainScreenState extends State<MainScreen> {
       Fluttertoast.showToast(msg: "No online driver is available, Search again after some time");
 
       Future.delayed(const Duration(milliseconds: 3000), (){
-        MyApp.restartApp(context);
+        //MyApp.restartApp(context);
+        SystemNavigator.pop();
       });
 
       return;
@@ -294,7 +331,7 @@ class _MainScreenState extends State<MainScreen> {
     // if driver is available
     await retrieveOnlineDriversInfo(onlineNearbyAvaibaleDriversList);
 
-    Navigator.push(context, MaterialPageRoute(builder: (c) => SelectNearestActiveDriverScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (c) => SelectNearestActiveDriverScreen(referenceRideRequest: referenceRideRequest)));
   }
 
   retrieveOnlineDriversInfo(List onlineNearestDriversList) async {
@@ -419,13 +456,21 @@ class _MainScreenState extends State<MainScreen> {
                             children: [
                               const Text(
                                 "From",
-                                style: TextStyle(color: Color(0xFFff725e), fontSize: 12,),
+                                style: TextStyle(
+                                  color: Color(0xFFff725e),
+                                  fontSize: 12,
+                                  fontFamily: "PTSerif",
+                                ),
                               ),
                               Text(
                                 Provider.of<AppInfo>(context).userPickupLocation != null
                                     ? (Provider.of<AppInfo>(context).userPickupLocation!.locationName!).substring(0, 35) + "..."
                                     : "Your Current Location",
-                                style: const TextStyle(color: Colors.white, fontSize: 15,),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontFamily: "PTSerif",
+                                ),
                               ),
                             ],
                           ),
@@ -463,13 +508,21 @@ class _MainScreenState extends State<MainScreen> {
                               children: [
                                 const Text(
                                   "To",
-                                  style: TextStyle(color: Color(0xFFff725e), fontSize: 12,),
+                                  style: TextStyle(
+                                    color: Color(0xFFff725e),
+                                    fontSize: 12,
+                                    fontFamily: "PTSerif",
+                                  ),
                                 ),
                                 Text(
                                   Provider.of<AppInfo>(context).userDropOffLocation != null
                                       ? Provider.of<AppInfo>(context).userDropOffLocation!.locationName!
                                       : "User Drop off location",
-                                  style: const TextStyle(color: Colors.white, fontSize: 15,),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontFamily: "PTSerif",
+                                  ),
                                 ),
                               ],
                             ),
@@ -495,6 +548,7 @@ class _MainScreenState extends State<MainScreen> {
                             "Request a Ride",
                             style: TextStyle(
                               color: Colors.white,
+                              fontFamily: "PTSerif",
                             ),
                           ),
                           onPressed: (){

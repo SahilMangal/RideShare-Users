@@ -78,8 +78,10 @@ class PlacePredictionTileDesign extends StatelessWidget {
                       predictedPlaces!.main_text!,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        fontSize: 16.0,
+                        fontSize: 17.0,
                         color: Color(0xFFff725e),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "PTSerif"
                       ),
                     ),
 
@@ -91,6 +93,7 @@ class PlacePredictionTileDesign extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 12.0,
                         color: Colors.white54,
+                        fontFamily: "PTSerif",
                       ),
                     ),
 

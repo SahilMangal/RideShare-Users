@@ -1,11 +1,17 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rideshare_users/assistants/assistant_methods.dart';
 import 'package:rideshare_users/global/global.dart';
 import 'package:rideshare_users/main.dart';
 import 'package:smooth_star_rating_nsafe/smooth_star_rating.dart';
 
 class SelectNearestActiveDriverScreen extends StatefulWidget {
-  const SelectNearestActiveDriverScreen({super.key});
+
+  DatabaseReference? referenceRideRequest;
+
+  SelectNearestActiveDriverScreen({this.referenceRideRequest});
 
   @override
   State<SelectNearestActiveDriverScreen> createState() => _SelectNearestActiveDriverScreenState();
@@ -47,8 +53,11 @@ class _SelectNearestActiveDriverScreenState extends State<SelectNearestActiveDri
           ),
           onPressed: (){
             // Delete/remove the ride request from database
+            widget.referenceRideRequest!.remove();
+            Fluttertoast.showToast(msg: "You have cancelled the ride request");
 
-            MyApp.restartApp(context);
+            //MyApp.restartApp(context);
+            SystemNavigator.pop();
 
           },
         ),

@@ -89,6 +89,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                             color: Color(0xFFff725e),
                             fontSize: 19,
                             fontWeight: FontWeight.bold,
+                            fontFamily: "PTSerif",
                           ),
                         ),
                       ),
