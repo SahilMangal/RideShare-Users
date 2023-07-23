@@ -11,6 +11,7 @@ import 'package:rideshare_users/global/map_key.dart';
 import 'package:rideshare_users/infoHandler/app_info.dart';
 import 'package:rideshare_users/models/direction_details_info.dart';
 import 'package:rideshare_users/models/directions.dart';
+import 'package:rideshare_users/models/trips_history_model.dart';
 import 'package:rideshare_users/models/user_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -117,4 +118,50 @@ class AssistantMethods{
 
   }
 
+  // Retrieve the trip keys for online user
+  static void readTripsKeysForOnlineUser(context){
+    FirebaseDatabase.instance
+        .ref()
+        .child("All Ride Requests")
+        .orderByChild("userName")
+        .equalTo(userModelCurrentInfo!.name)
+        .once().then((snap) {
+          if(snap.snapshot.value != null) {
+            Map keysTripsId = snap.snapshot.value as Map;
+            int overAllTripsCounter = keysTripsId.length;
+            Provider.of<AppInfo>(context, listen: false).updateOverAllTripsCounter(overAllTripsCounter);
+
+            List<String> tripsKeysList = [];
+            keysTripsId.forEach((key, value) {
+              tripsKeysList.add(key);
+            });
+            Provider.of<AppInfo>(context, listen: false).updateOverAllTripsKeys(tripsKeysList);
+
+            // Trip Complete Info
+            readTripsHistoryInformation(context);
+
+          }
+    });
+  }
+
+  static void readTripsHistoryInformation(context) {
+
+    var tripsAllKeys = Provider.of<AppInfo>(context, listen: false).historyTripsKeysList;
+
+    for(String eachKey in tripsAllKeys)
+    {
+      FirebaseDatabase.instance.ref()
+          .child("All Ride Requests")
+          .child(eachKey)
+          .once()
+          .then((snap)
+      {
+        var eachTripHistory = TripsHistoryModel.fromSnapshot(snap.snapshot);
+
+        if((snap.snapshot.value as Map)["status"] == "ended") {
+          Provider.of<AppInfo>(context, listen: false).updateOverAllTripHistoryInformation(eachTripHistory);
+        }
+      });
+    }
+  }
 }

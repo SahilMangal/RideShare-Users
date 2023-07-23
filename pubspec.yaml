@@ -47,6 +47,7 @@ dependencies:
   flutter_geofire: ^2.0.3
   smooth_star_rating_nsafe: ^1.0.0+1
   animated_text_kit: ^4.2.2
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +79,8 @@ flutter:
     - images/bike.png
     - images/Car.png
     - images/Car-XL.png
+    - images/destination.png
+    - images/origin.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
