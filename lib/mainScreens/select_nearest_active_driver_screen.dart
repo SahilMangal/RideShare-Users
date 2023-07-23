@@ -65,78 +65,88 @@ class _SelectNearestActiveDriverScreenState extends State<SelectNearestActiveDri
       body: ListView.builder(
         itemCount: dList.length,
         itemBuilder: (BuildContext context, int index) {
-          return Card(
-            color: Color(0xFFff725e),
-            elevation: 3,
-            shadowColor: Colors.green,
-            margin: const EdgeInsets.all(8),
-            child: ListTile(
-              leading: Padding(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: Image.asset(
-                  "images/" + dList[index]["car_details"]["type"].toString() + ".png",
+          return GestureDetector(
+            onTap: (){
+              setState(() {
+                chosenDriverId = dList[index]["id"].toString();
+              });
+
+              Navigator.pop(context, "driverChoosed");
+
+            },
+            child: Card(
+              color: Color(0xFFff725e),
+              elevation: 3,
+              shadowColor: Colors.green,
+              margin: const EdgeInsets.all(8),
+              child: ListTile(
+                leading: Padding(
+                  padding: const EdgeInsets.only(top: 2.0),
+                  child: Image.asset(
+                    "images/" + dList[index]["car_details"]["type"].toString() + ".png",
+                  ),
                 ),
-              ),
-              title: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    dList[index]["name"],
-                    style: const TextStyle(
-                      fontSize: 14,
+                title: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      dList[index]["name"],
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      dList[index]["car_details"]["car_model"],
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.white60,
+                      ),
+                    ),
+                    SmoothStarRating(
+                      rating: 3.5,
                       color: Colors.black,
-                      fontWeight: FontWeight.bold,
+                      borderColor: Colors.black,
+                      allowHalfRating: true,
+                      starCount: 5,
+                      size: 15,
+                    )
+                  ],
+                ),
+                trailing: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "\$ " + getFareAmountAccordingToVehicleType(index),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Text(
-                    dList[index]["car_details"]["car_model"],
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.white60,
+                    const SizedBox(height: 2,),
+                    Text(
+                      tripDirectionDetailsInfo != null
+                          ? tripDirectionDetailsInfo!.durarion_text!
+                          : "",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                        fontSize: 12,
+                      ),
                     ),
-                  ),
-                  SmoothStarRating(
-                    rating: 3.5,
-                    color: Colors.black,
-                    borderColor: Colors.black,
-                    allowHalfRating: true,
-                    starCount: 5,
-                    size: 15,
-                  )
-                ],
-              ),
-              trailing: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "\$ " + getFareAmountAccordingToVehicleType(index),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
+                    const SizedBox(height: 2,),
+                    Text(
+                      tripDirectionDetailsInfo != null
+                          ? tripDirectionDetailsInfo!.distance_text!
+                          : "",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                        fontSize: 12,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 2,),
-                  Text(
-                    tripDirectionDetailsInfo != null
-                        ? tripDirectionDetailsInfo!.durarion_text!
-                        : "",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                      fontSize: 12,
-                    ),
-                  ),
-                  const SizedBox(height: 2,),
-                  Text(
-                    tripDirectionDetailsInfo != null
-                        ? tripDirectionDetailsInfo!.distance_text!
-                        : "",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );

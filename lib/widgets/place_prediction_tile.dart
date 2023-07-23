@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rideshare_users/assistants/request_assistant.dart';
+import 'package:rideshare_users/global/global.dart';
 import 'package:rideshare_users/global/map_key.dart';
 import 'package:rideshare_users/infoHandler/app_info.dart';
 import 'package:rideshare_users/models/directions.dart';
 import 'package:rideshare_users/models/predicted_places.dart';
 import 'package:rideshare_users/widgets/progress_dialog.dart';
 
-class PlacePredictionTileDesign extends StatelessWidget {
+class PlacePredictionTileDesign extends StatefulWidget {
 
   final PredictedPlaces? predictedPlaces;
 
@@ -15,6 +16,11 @@ class PlacePredictionTileDesign extends StatelessWidget {
     this.predictedPlaces
   });
 
+  @override
+  State<PlacePredictionTileDesign> createState() => _PlacePredictionTileDesignState();
+}
+
+class _PlacePredictionTileDesignState extends State<PlacePredictionTileDesign> {
   getPlaceDirectionDetails(String? placeId, context) async {
     showDialog(
         context: context,
@@ -27,7 +33,7 @@ class PlacePredictionTileDesign extends StatelessWidget {
     var responseApi = await RequestAssistant.receiveRequest(placeDirectionDetailsUrl);
 
     Navigator.pop(context);
-    
+
     if(responseApi == "Error Occurred, No Response."){
       return;
     }
@@ -41,6 +47,10 @@ class PlacePredictionTileDesign extends StatelessWidget {
 
       Provider.of<AppInfo>(context, listen: false).updateDropOffLocationAddress(directions);
 
+      setState(() {
+        userDropOffAddress = directions.locationName!;
+      });
+
       Navigator.pop(context, "obtainedDropoff");
 
     }
@@ -51,7 +61,7 @@ class PlacePredictionTileDesign extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: (){
-        getPlaceDirectionDetails(predictedPlaces!.place_id, context);
+        getPlaceDirectionDetails(widget.predictedPlaces!.place_id, context);
       },
       style: ElevatedButton.styleFrom(
         primary: Color(0xFF2D2727),
@@ -75,7 +85,7 @@ class PlacePredictionTileDesign extends StatelessWidget {
                     const SizedBox(height: 8.0,),
 
                     Text(
-                      predictedPlaces!.main_text!,
+                      widget.predictedPlaces!.main_text!,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 17.0,
@@ -88,7 +98,7 @@ class PlacePredictionTileDesign extends StatelessWidget {
                     const SizedBox(height: 2.0,),
 
                     Text(
-                      predictedPlaces!.secondary_text!,
+                      widget.predictedPlaces!.secondary_text!,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 12.0,

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:rideshare_users/authentication/login_screen.dart';
 import 'package:rideshare_users/mainScreens/main_screen.dart';
@@ -19,7 +20,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
 
     fAuth.currentUser != null ? AssistantMethods.readCurrentOnlineUserInfo() : null;
 
-    Timer(const Duration(seconds: 3), () async {
+    Timer(const Duration(seconds: 4), () async {
 
       //check if user already logged in or not
       if(await fAuth.currentUser != null){
