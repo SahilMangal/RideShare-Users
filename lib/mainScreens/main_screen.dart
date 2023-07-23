@@ -15,6 +15,7 @@ import 'package:rideshare_users/authentication/login_screen.dart';
 import 'package:rideshare_users/global/global.dart';
 import 'package:rideshare_users/infoHandler/app_info.dart';
 import 'package:rideshare_users/main.dart';
+import 'package:rideshare_users/mainScreens/rate_driver_screen.dart';
 import 'package:rideshare_users/mainScreens/search_places_screen.dart';
 import 'package:rideshare_users/mainScreens/select_nearest_active_driver_screen.dart';
 import 'package:rideshare_users/models/active_nearby_available_drivers.dart';
@@ -372,6 +373,17 @@ class _MainScreenState extends State<MainScreen> {
 
             if(response == "cashPayed"){
               // user can rate the driver now
+              if((eventSnap.snapshot.value as Map)["driverId"] != null){
+                String assignedDriverId = (eventSnap.snapshot.value as Map)["driverId"].toString();
+                Navigator.push(context, MaterialPageRoute(builder: (c)=> RateDriverScreen(
+                    assignedDriverId: assignedDriverId
+                )));
+
+                referenceRideRequest!.onDisconnect();
+                tripRideRequestInfoStreamSubscription!.cancel();
+
+              }
+
             }
 
           }
