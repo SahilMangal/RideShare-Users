@@ -523,11 +523,7 @@ class _MainScreenState extends State<MainScreen> {
                   showUIForAssignedDriverInfo();
 
                 }
-
               });
-
-
-
             } else {
               Fluttertoast.showToast(msg: "This Driver don't exist.");
             }
@@ -712,7 +708,7 @@ class _MainScreenState extends State<MainScreen> {
                                 style: TextStyle(
                                   color: Color(0xFFff725e),
                                   fontSize: 12,
-                                  fontFamily: "PTSerif",
+                                  fontFamily: "Ubuntu",
                                 ),
                               ),
                               Text(
@@ -722,7 +718,7 @@ class _MainScreenState extends State<MainScreen> {
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 15,
-                                  fontFamily: "PTSerif",
+                                  fontFamily: "Ubuntu",
                                 ),
                               ),
                             ],
@@ -764,7 +760,7 @@ class _MainScreenState extends State<MainScreen> {
                                   style: TextStyle(
                                     color: Color(0xFFff725e),
                                     fontSize: 12,
-                                    fontFamily: "PTSerif",
+                                    fontFamily: "Ubuntu",
                                   ),
                                 ),
                                 Text(
@@ -774,7 +770,7 @@ class _MainScreenState extends State<MainScreen> {
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 15,
-                                    fontFamily: "PTSerif",
+                                    fontFamily: "Ubuntu",
                                   ),
                                 ),
                               ],
@@ -801,7 +797,8 @@ class _MainScreenState extends State<MainScreen> {
                             "Request a Ride",
                             style: TextStyle(
                               color: Colors.white,
-                              fontFamily: "PTSerif",
+                              fontFamily: "Ubuntu",
+                              fontWeight: FontWeight.bold
                             ),
                           ),
                           onPressed: (){
@@ -815,7 +812,7 @@ class _MainScreenState extends State<MainScreen> {
                           },
                           style: ElevatedButton.styleFrom(
                             primary: Color(0xFFff725e),
-                            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold,fontFamily: "PTSerif"),
+                            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold,fontFamily: "Ubuntu"),
                           ),
                         ),
                       )
@@ -857,7 +854,7 @@ class _MainScreenState extends State<MainScreen> {
                             fontSize: 30.0,
                             color: Color(0xFFff725e),
                             fontWeight: FontWeight.bold,
-                            fontFamily: "PTSerif"
+                            fontFamily: "Ubuntu"
                         ),
                       ),
                       ScaleAnimatedText(
@@ -867,7 +864,7 @@ class _MainScreenState extends State<MainScreen> {
                         textStyle: const TextStyle(
                             fontSize: 32.0,
                             color: Color(0xFFff725e),
-                            fontFamily: "PTSerif"
+                            fontFamily: "Ubuntu"
                         ),
                       ),
                     ],
@@ -906,7 +903,7 @@ class _MainScreenState extends State<MainScreen> {
                         driverRideStatus,
                         style: const TextStyle(
                           fontSize: 20,
-                          fontFamily: "PTSerif",
+                          fontFamily: "Ubuntu",
                           fontWeight: FontWeight.bold,
                           color: Color(0xFFff725e),
                         ),
@@ -933,7 +930,7 @@ class _MainScreenState extends State<MainScreen> {
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 16,
-                            fontFamily: "PTSerif",
+                            fontFamily: "Ubuntu",
                             color: Color(0xFFff725e),
                           ),
                         ),
@@ -952,7 +949,7 @@ class _MainScreenState extends State<MainScreen> {
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 20,
-                            fontFamily: "PTSerif",
+                            fontFamily: "Ubuntu",
                             fontWeight: FontWeight.bold,
                             color: Colors.white70,
                           ),
@@ -989,7 +986,7 @@ class _MainScreenState extends State<MainScreen> {
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontFamily: "PTSerif",
+                            fontFamily: "Ubuntu",
                           ),
                         ),
                       ),

@@ -47,8 +47,8 @@ class _MyDrawerState extends State<MyDrawer> {
                       Text(
                         widget.name.toString(),
                         style: const TextStyle(
-                          fontSize: 19,
-                          fontFamily: 'PTSerif',
+                          fontSize: 20,
+                          fontFamily: 'Ubuntu',
                           color: Color(0xFFECEFF1),
                           fontWeight: FontWeight.bold,
                         ),
@@ -61,7 +61,7 @@ class _MyDrawerState extends State<MyDrawer> {
                         widget.email.toString(),
                         style: const TextStyle(
                           fontSize: 12,
-                          fontFamily: 'PTSerif',
+                          fontFamily: 'Ubuntu',
                           color: Color(0xFFECEFF1),
                         ),
                       ),
@@ -90,7 +90,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 style: TextStyle(
                   color: Color(0xFFff725e),
                   fontSize: 20,
-                  fontFamily: 'PTSerif',
+                  fontFamily: 'Ubuntu',
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -111,7 +111,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 style: TextStyle(
                   color: Color(0xFFff725e),
                   fontSize: 20,
-                  fontFamily: 'PTSerif',
+                  fontFamily: 'Ubuntu',
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -132,7 +132,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 style: TextStyle(
                   color: Color(0xFFff725e),
                   fontSize: 20,
-                  fontFamily: 'PTSerif',
+                  fontFamily: 'Ubuntu',
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -155,7 +155,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 style: TextStyle(
                   color: Color(0xFFff725e),
                   fontSize: 20,
-                  fontFamily: 'PTSerif',
+                  fontFamily: 'Ubuntu',
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -175,7 +175,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 style: TextStyle(
                   color: Color(0xFFff725e),
                   fontSize: 20,
-                  fontFamily: 'PTSerif',
+                  fontFamily: 'Ubuntu',
                   fontWeight: FontWeight.bold,
                 ),
               ),

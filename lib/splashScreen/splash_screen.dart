@@ -58,7 +58,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
                 "Ride Share!",
                 style: TextStyle(
                   fontSize: 30,
-                  fontFamily: 'PTSerif',
+                  fontFamily: 'Ubuntu',
                   color: Color(0xFFff725e),
                   fontWeight: FontWeight.bold,
                 ),

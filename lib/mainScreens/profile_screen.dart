@@ -24,7 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               userModelCurrentInfo!.name!,
               style: const TextStyle(
                 fontSize: 50,
-                fontFamily: "PTSerif",
+                fontFamily: "Ubuntu",
                 fontWeight: FontWeight.bold,
                   color: Color(0xFFff725e),
               ),
@@ -73,7 +73,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  fontFamily: "PTSerif"
+                  fontFamily: "Ubuntu"
                 ),
               ),
             ),

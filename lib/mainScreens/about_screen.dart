@@ -36,7 +36,7 @@ class _AboutScreenState extends State<AboutScreen> {
                   color: Color(0xFFff725e),
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
-                  fontFamily: "PTSerif",
+                  fontFamily: "Ubuntu",
                   letterSpacing: 6,
                 ),
               ),
@@ -87,7 +87,7 @@ class _AboutScreenState extends State<AboutScreen> {
                         color: Colors.white,
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        fontFamily: "PTSerif"
+                        fontFamily: "Ubuntu"
                     ),
                   ),
               ),

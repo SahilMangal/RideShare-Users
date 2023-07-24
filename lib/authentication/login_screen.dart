@@ -93,7 +93,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: TextStyle(
                     fontSize: 26,
                     color: Colors.white,
-                    fontWeight: FontWeight.bold
+                    fontWeight: FontWeight.bold,
+                  fontFamily: "Ubuntu"
                 ),
               ),
 
@@ -103,6 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 keyboardType: TextInputType.emailAddress,
                 style: const TextStyle(
                   color: Color(0xFFB0BEC5),
+                  fontFamily: "Ubuntu"
                 ),
                 decoration: const InputDecoration(
                   labelText: "Email",
@@ -117,10 +119,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   hintStyle: TextStyle(
                     color: Colors.white,
                     fontSize: 10,
+                    fontFamily: "Ubuntu"
                   ),
                   labelStyle: TextStyle(
                     color: Color(0xFFff725e),
                     fontSize: 15,
+                    fontFamily: "Ubuntu"
                   ),
 
 
@@ -134,6 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 obscureText: true,
                 style: const TextStyle(
                   color: Color(0xFFB0BEC5),
+                  fontFamily: "Ubuntu"
                 ),
                 decoration: const InputDecoration(
                   labelText: "Password",
@@ -148,10 +153,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   hintStyle: TextStyle(
                     color: Color(0xFFB0BEC5),
                     fontSize: 10,
+                    fontFamily: "Ubuntu"
                   ),
                   labelStyle: TextStyle(
                     color: Color(0xFFff725e),
                     fontSize: 15,
+                    fontFamily: "Ubuntu"
                   ),
 
 
@@ -176,6 +183,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(
                       color: Color(0xFF1a2e35),
                       fontSize: 18,
+                      fontFamily: "Ubuntu",
+                      fontWeight: FontWeight.bold
                     ),
                   ),
                 ),
@@ -188,8 +197,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: const Text(
                   "Don't have an account? Register Now!",
                   style: TextStyle(
-                    color: Colors.white24,
+                    color: Colors.white38,
                     fontStyle: FontStyle.italic,
+                    fontFamily: "Ubuntu"
                   ),
                 ),
                 onPressed: (){

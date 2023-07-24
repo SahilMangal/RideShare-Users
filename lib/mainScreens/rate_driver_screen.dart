@@ -54,7 +54,7 @@ class _RateDriverScreenState extends State<RateDriverScreen> {
                     fontSize: 20,
                     letterSpacing: 2,
                     color: Color(0xFFff725e),
-                    fontFamily: "PTSerif"
+                    fontFamily: "Ubuntu"
                 ),
               ),
 
@@ -119,7 +119,7 @@ class _RateDriverScreenState extends State<RateDriverScreen> {
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey,
-                    fontFamily: "PTSerif"
+                    fontFamily: "Ubuntu"
                 ),
               ),
 
@@ -161,7 +161,7 @@ class _RateDriverScreenState extends State<RateDriverScreen> {
                         fontSize: 20,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontFamily: "PTSerif"
+                        fontFamily: "Ubuntu"
                     ),
                   ),
               ),

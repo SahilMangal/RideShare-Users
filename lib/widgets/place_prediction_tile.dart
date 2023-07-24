@@ -91,7 +91,7 @@ class _PlacePredictionTileDesignState extends State<PlacePredictionTileDesign> {
                         fontSize: 17.0,
                         color: Color(0xFFff725e),
                         fontWeight: FontWeight.bold,
-                        fontFamily: "PTSerif"
+                        fontFamily: "Ubuntu"
                       ),
                     ),
 
@@ -103,7 +103,7 @@ class _PlacePredictionTileDesignState extends State<PlacePredictionTileDesign> {
                       style: const TextStyle(
                         fontSize: 12.0,
                         color: Colors.white54,
-                        fontFamily: "PTSerif",
+                        fontFamily: "Ubuntu",
                       ),
                     ),
 

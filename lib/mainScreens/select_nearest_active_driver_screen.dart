@@ -43,7 +43,7 @@ class _SelectNearestActiveDriverScreenState extends State<SelectNearestActiveDri
           "Nearest Active Drivers",
           style: TextStyle(
             fontSize: 18,
-
+            fontFamily: "Ubuntu"
           ),
         ),
         leading: IconButton(
@@ -95,6 +95,7 @@ class _SelectNearestActiveDriverScreenState extends State<SelectNearestActiveDri
                         fontSize: 14,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
+                        fontFamily: "Ubuntu"
                       ),
                     ),
                     Text(
@@ -102,6 +103,7 @@ class _SelectNearestActiveDriverScreenState extends State<SelectNearestActiveDri
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.white60,
+                        fontFamily: "Ubuntu"
                       ),
                     ),
                     SmoothStarRating(
@@ -121,6 +123,7 @@ class _SelectNearestActiveDriverScreenState extends State<SelectNearestActiveDri
                       "\$ " + getFareAmountAccordingToVehicleType(index),
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
+                        fontFamily: "Ubuntu"
                       ),
                     ),
                     const SizedBox(height: 2,),
@@ -131,6 +134,7 @@ class _SelectNearestActiveDriverScreenState extends State<SelectNearestActiveDri
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black87,
+                        fontFamily: "Ubuntu",
                         fontSize: 12,
                       ),
                     ),
@@ -143,6 +147,7 @@ class _SelectNearestActiveDriverScreenState extends State<SelectNearestActiveDri
                         fontWeight: FontWeight.bold,
                         color: Colors.black87,
                         fontSize: 12,
+                        fontFamily: "Ubuntu"
                       ),
                     ),
                   ],
