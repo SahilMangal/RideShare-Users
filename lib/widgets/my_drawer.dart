@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rideshare_users/global/global.dart';
+import 'package:rideshare_users/mainScreens/about_screen.dart';
+import 'package:rideshare_users/mainScreens/profile_screen.dart';
 import 'package:rideshare_users/mainScreens/trips_history_screen.dart';
 import 'package:rideshare_users/splashScreen/splash_screen.dart';
 
@@ -98,7 +100,9 @@ class _MyDrawerState extends State<MyDrawer> {
           //Profile Button
           GestureDetector(
             onTap: (){
-
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (c)=> ProfileScreen())
+              );
             },
             child: const ListTile(
               leading: Icon(Icons.person_2_rounded, color: Colors.white38,size: 30,), //0xFFff725e
@@ -117,7 +121,9 @@ class _MyDrawerState extends State<MyDrawer> {
           // About Page
           GestureDetector(
             onTap: (){
-
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (c)=> AboutScreen())
+              );
             },
             child: const ListTile(
               leading: Icon(Icons.info, color: Colors.white38,size: 30,), //0xFFff725e

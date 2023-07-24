@@ -105,7 +105,7 @@ class _SelectNearestActiveDriverScreenState extends State<SelectNearestActiveDri
                       ),
                     ),
                     SmoothStarRating(
-                      rating: 3.5,
+                      rating: dList[index]["ratings"] == null ? 0.0 : double.parse(dList[index]["ratings"]),
                       color: Colors.black,
                       borderColor: Colors.black,
                       allowHalfRating: true,
