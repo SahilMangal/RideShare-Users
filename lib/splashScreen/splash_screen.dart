@@ -62,7 +62,25 @@ class _MySplashScreenState extends State<MySplashScreen> {
                   color: Color(0xFFff725e),
                   fontWeight: FontWeight.bold,
                 ),
+              ),
+
+              const SizedBox(height: 10,),
+
+              DefaultTextStyle(
+                  style: const TextStyle(
+                    fontFamily: 'Ubuntu',
+                    color: Color(0xFFff725e),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20
+                  ),
+                  child: AnimatedTextKit(animatedTexts: [
+                    TyperAnimatedText("Welcome Back !!"),
+                    TyperAnimatedText("Enjoy the Experience !!"),
+                  ])
               )
+
+
+
             ],
           ),
         ),

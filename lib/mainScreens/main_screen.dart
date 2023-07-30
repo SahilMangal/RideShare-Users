@@ -307,6 +307,7 @@ class _MainScreenState extends State<MainScreen> {
       "originAddress": originLocation.locationName,
       "destinationAddress": destinationLocation.locationName,
       "driverId": "waiting",
+      "paymentMethod": "waiting"
     };
 
     //save information in database
@@ -386,7 +387,13 @@ class _MainScreenState extends State<MainScreen> {
                 tripRideRequestInfoStreamSubscription!.cancel();
 
               }
-
+              if(eventSnap.snapshot.key! != null) {
+                FirebaseDatabase.instance.ref()
+                    .child("All Ride Requests")
+                    .child(eventSnap.snapshot.key!)
+                    .child("paymentMethod")
+                    .set("PayedCash");
+              }
             }
 
           }
