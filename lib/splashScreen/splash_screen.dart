@@ -64,12 +64,12 @@ class _MySplashScreenState extends State<MySplashScreen> {
                 ),
               ),
 
-              const SizedBox(height: 10,),
+              const SizedBox(height: 20,),
 
               DefaultTextStyle(
                   style: const TextStyle(
                     fontFamily: 'Ubuntu',
-                    color: Color(0xFFff725e),
+                    color: Colors.black54,
                     fontWeight: FontWeight.bold,
                     fontSize: 20
                   ),
